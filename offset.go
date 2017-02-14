@@ -31,6 +31,8 @@ func (o *Offset) UnmarshalText(data []byte) error {
 		}
 		o.Percent = float32(p) / 100
 		return nil
+	} else {
+		o.Percent = 0
 	}
 	var d Duration
 	o.Duration = &d

@@ -255,7 +255,7 @@ type Linear struct {
 	// begins playing.
 	SkipOffset *Offset `xml:"skipoffset,attr,omitempty"`
 	// Duration in standard time format, hh:mm:ss
-	Duration           string
+	Duration           *Duration
 	AdParameters       *AdParameters `xml:",omitempty"`
 	Icons              []Icon
 	TrackingEvents     []Tracking          `xml:"TrackingEvents>Tracking,omitempty"`
