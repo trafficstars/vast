@@ -7,7 +7,6 @@ import (
 )
 
 var _ = Describe("Offset", func() {
-	zero := Duration(0)
 
 	DescribeTable("marshal",
 		func(o *Offset, exp string) {
@@ -17,7 +16,7 @@ var _ = Describe("Offset", func() {
 		},
 		Entry("0%", &Offset{}, "0%"),
 		Entry("10%", &Offset{Percent: 0.1}, "10%"),
-		Entry("00:00:00", &Offset{Duration: &zero}, "00:00:00"),
+		Entry("00:00:00", &Offset{Duration: durationPtr(0)}, "00:00:00"),
 	)
 
 	DescribeTable("unmarshal",
@@ -29,7 +28,7 @@ var _ = Describe("Offset", func() {
 		},
 		Entry("0%", "0%", 0.0, nil),
 		Entry("10%", "10%", 0.1, nil),
-		Entry("00:00:00", "00:00:00", 0.0, &zero),
+		Entry("00:00:00", "00:00:00", 0.0, durationPtr(0)),
 	)
 
 	It("should fail to unmarshal bad inputs", func() {
