@@ -96,6 +96,18 @@ var _ = Describe("VAST", func() {
 						{URI: URIString("http://myErrorURL/error")},
 						{URI: URIString("http://myErrorURL/error2")},
 					},
+					Extensions: &Extensions{
+						Extensions: []Extension{
+							{
+								Data: []byte(`
+			<Geo>
+				<Country>US</Country>
+				<State>CA</State>
+			</Geo>
+		`),
+							},
+						},
+					},
 				},
 			}},
 		}),
@@ -231,7 +243,38 @@ var _ = Describe("VAST", func() {
 			},
 		}),
 
-		PEntry("wrapper nonlinear", "testdata/vast_wrapper_nonlinear_1.xml", &VAST{}),
+		Entry("wrapper nonlinear", "testdata/vast_wrapper_nonlinear_1.xml", &VAST{
+			Version: "2.0",
+			Ads: []Ad{
+				{
+					ID: "602867",
+					Wrapper: &Wrapper{
+						AdSystem:     &AdSystem{Name: "Acudeo Compatible"},
+						VASTAdTagURI: URIString("http://demo.tremormedia.com/proddev/vast/vast_inline_nonlinear2.xml"),
+						Error:        []Error{{URI: URIString("http://myErrorURL/wrapper/error")}},
+						Impressions:  []Impression{{URI: URIString("http://myTrackingURL/wrapper/impression")}},
+						Creatives: []CreativeWrapper{
+							{
+								AdID:   "602867",
+								Linear: &LinearWrapper{},
+							},
+							{
+								AdID: "602867-NonLinearTracking",
+								NonLinearAds: &NonLinearAdsWrapper{
+									TrackingEvents: []Tracking{
+										{Event: "creativeView", URI: URIString("http://myTrackingURL/wrapper/nonlinear/creativeView/creativeView")},
+										{Event: "expand", URI: URIString("http://myTrackingURL/wrapper/nonlinear/creativeView/expand")},
+										{Event: "collapse", URI: URIString("http://myTrackingURL/wrapper/nonlinear/creativeView/collapse")},
+										{Event: "acceptInvitation", URI: URIString("http://myTrackingURL/wrapper/nonlinear/creativeView/acceptInvitation")},
+										{Event: "close", URI: URIString("http://myTrackingURL/wrapper/nonlinear/creativeView/close")},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}),
 	)
 
 })

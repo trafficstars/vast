@@ -46,6 +46,14 @@
 			</CompanionAds>
 		</Creative>
 	</Creatives>
+	<Extensions>
+		<Extension>
+			<Geo>
+				<Country>US</Country>
+				<State>CA</State>
+			</Geo>
+		</Extension>
+	</Extensions>
   </InLine>
   </Ad>
 </VAST>
