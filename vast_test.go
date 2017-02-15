@@ -100,7 +100,88 @@ var _ = Describe("VAST", func() {
 			}},
 		}),
 
-		PEntry("inline nonlinear", "testdata/vast_inline_nonlinear.xml", &VAST{}),
+		Entry("inline nonlinear", "testdata/vast_inline_nonlinear.xml", &VAST{
+			Version: "2.0",
+			Ads: []Ad{
+				{
+					ID: "602678",
+					InLine: &InLine{
+						AdSystem:    &AdSystem{Name: "Acudeo Compatible"},
+						AdTitle:     &AdTitle{Name: "NonLinear Test Campaign 1"},
+						Description: "NonLinear Test Campaign 1",
+						Survey:      "http://mySurveyURL/survey",
+						Error:       []Error{{URI: "http://myErrorURL/error"}},
+						Impressions: []Impression{{URI: "http://myTrackingURL/impression"}},
+						Creatives: []Creative{
+							{
+								AdID: "602678-NonLinear",
+								NonLinearAds: &NonLinearAds{
+									TrackingEvents: []Tracking{
+										{Event: "creativeView", URI: "http://myTrackingURL/nonlinear/creativeView"},
+										{Event: "expand", URI: "http://myTrackingURL/nonlinear/expand"},
+										{Event: "collapse", URI: "http://myTrackingURL/nonlinear/collapse"},
+										{Event: "acceptInvitation", URI: "http://myTrackingURL/nonlinear/acceptInvitation"},
+										{Event: "close", URI: "http://myTrackingURL/nonlinear/close"},
+									},
+									NonLinears: []NonLinear{
+										{
+											Height:               50,
+											Width:                300,
+											MinSuggestedDuration: durationPtr(15 * time.Second),
+											StaticResource: &StaticResource{
+												CreativeType: "image/jpeg",
+												// TODO: Normalize these URIs
+												URI: "\n\t\t\t\t\thttp://demo.tremormedia.com/proddev/vast/50x300_static.jpg\n\t\t\t\t\t",
+											},
+											NonLinearClickThrough: "http://www.tremormedia.com",
+										},
+										{
+											Height:               50,
+											Width:                450,
+											MinSuggestedDuration: durationPtr(20 * time.Second),
+											StaticResource: &StaticResource{
+												CreativeType: "image/jpeg",
+												// TODO: Normalize these URIs
+												URI: "\n\t\t\t\t\thttp://demo.tremormedia.com/proddev/vast/50x450_static.jpg\n\t\t\t\t\t",
+											},
+											NonLinearClickThrough: "http://www.tremormedia.com",
+										},
+									},
+								},
+							},
+							{
+								AdID: "602678-Companion",
+								CompanionAds: &CompanionAds{
+									Companions: []Companion{
+										{
+											Width:  300,
+											Height: 250,
+											StaticResource: &StaticResource{
+												CreativeType: "application/x-shockwave-flash",
+												URI:          "http://demo.tremormedia.com/proddev/vast/300x250_companion_1.swf",
+											},
+											CompanionClickThrough: &CompanionClickThrough{URI: "http://www.tremormedia.com"},
+										},
+										{
+											Width:  728,
+											Height: 90,
+											StaticResource: &StaticResource{
+												CreativeType: "image/jpeg",
+												URI:          "http://demo.tremormedia.com/proddev/vast/728x90_banner1.jpg",
+											},
+											TrackingEvents: []Tracking{
+												{Event: "creativeView", URI: "http://myTrackingURL/secondCompanion"},
+											},
+											CompanionClickThrough: &CompanionClickThrough{URI: "http://www.tremormedia.com"},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}),
 		PEntry("wrapper linear", "testdata/vast_wrapper_linear_1.xml", &VAST{}),
 		PEntry("wrapper nonlinear", "testdata/vast_wrapper_nonlinear_1.xml", &VAST{}),
 	)
