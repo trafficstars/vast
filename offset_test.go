@@ -1,45 +1,39 @@
 package vast
 
 import (
-	"testing"
-
-	"github.com/stretchr/testify/assert"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/extensions/table"
+	. "github.com/onsi/gomega"
 )
 
-func TestOffsetMarshaler(t *testing.T) {
-	b, err := Offset{}.MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "0%", string(b))
-	}
-	b, err = Offset{Percent: .1}.MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "10%", string(b))
-	}
-	d := Duration(0)
-	b, err = Offset{Duration: &d}.MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "00:00:00", string(b))
-	}
-}
+var _ = Describe("Offset", func() {
 
-func TestOffsetUnmarshaler(t *testing.T) {
-	var o Offset
-	if assert.NoError(t, o.UnmarshalText([]byte("0%"))) {
-		assert.Nil(t, o.Duration)
-		assert.Equal(t, float32(0.0), o.Percent)
-	}
-	o = Offset{}
-	if assert.NoError(t, o.UnmarshalText([]byte("10%"))) {
-		assert.Nil(t, o.Duration)
-		assert.Equal(t, float32(0.1), o.Percent)
-	}
-	o = Offset{}
-	if assert.NoError(t, o.UnmarshalText([]byte("00:00:00"))) {
-		if assert.NotNil(t, o.Duration) {
-			assert.Equal(t, Duration(0), *o.Duration)
-		}
-		assert.Equal(t, float32(0), o.Percent)
-	}
-	o = Offset{}
-	assert.EqualError(t, o.UnmarshalText([]byte("abc%")), "invalid offset: abc%")
-}
+	DescribeTable("marshal",
+		func(o *Offset, exp string) {
+			b, err := o.MarshalText()
+			Expect(err).NotTo(HaveOccurred())
+			Expect(string(b)).To(Equal(exp))
+		},
+		Entry("0%", &Offset{}, "0%"),
+		Entry("10%", &Offset{Percent: 0.1}, "10%"),
+		Entry("00:00:00", &Offset{Duration: durationPtr(0)}, "00:00:00"),
+	)
+
+	DescribeTable("unmarshal",
+		func(s string, pc float64, dur *Duration) {
+			o := Offset{}
+			Expect(o.UnmarshalText([]byte(s))).To(Succeed())
+			Expect(o.Percent).To(BeNumerically("~", pc, 0.001))
+			Expect(o.Duration).To(Equal(dur))
+		},
+		Entry("0%", "0%", 0.0, nil),
+		Entry("10%", "10%", 0.1, nil),
+		Entry("00:00:00", "00:00:00", 0.0, durationPtr(0)),
+	)
+
+	It("should fail to unmarshal bad inputs", func() {
+		o := new(Offset)
+		Expect(o.UnmarshalText([]byte("abc%"))).To(MatchError("invalid offset: abc%"))
+	})
+
+})

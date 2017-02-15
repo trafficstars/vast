@@ -1,59 +1,48 @@
 package vast
 
 import (
-	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/extensions/table"
+	. "github.com/onsi/gomega"
 )
 
-func TestDurationMarshaler(t *testing.T) {
-	b, err := Duration(0).MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "00:00:00", string(b))
-	}
-	b, err = Duration(2 * time.Millisecond).MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "00:00:00.002", string(b))
-	}
-	b, err = Duration(2 * time.Second).MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "00:00:02", string(b))
-	}
-	b, err = Duration(2 * time.Minute).MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "00:02:00", string(b))
-	}
-	b, err = Duration(2 * time.Hour).MarshalText()
-	if assert.NoError(t, err) {
-		assert.Equal(t, "02:00:00", string(b))
-	}
-}
+var _ = Describe("Duration", func() {
 
-func TestDurationUnmarshal(t *testing.T) {
-	var d Duration
-	if assert.NoError(t, d.UnmarshalText([]byte("00:00:00"))) {
-		assert.Equal(t, Duration(0), d)
-	}
-	d = 0
-	if assert.NoError(t, d.UnmarshalText([]byte("00:00:02"))) {
-		assert.Equal(t, Duration(2*time.Second), d)
-	}
-	d = 0
-	if assert.NoError(t, d.UnmarshalText([]byte("00:02:00"))) {
-		assert.Equal(t, Duration(2*time.Minute), d)
-	}
-	d = 0
-	if assert.NoError(t, d.UnmarshalText([]byte("02:00:00"))) {
-		assert.Equal(t, Duration(2*time.Hour), d)
-	}
-	d = 0
-	if assert.NoError(t, d.UnmarshalText([]byte("00:00:00.123"))) {
-		assert.Equal(t, Duration(123*time.Millisecond), d)
-	}
-	assert.EqualError(t, d.UnmarshalText([]byte("00:00:60")), "invalid duration: 00:00:60")
-	assert.EqualError(t, d.UnmarshalText([]byte("00:60:00")), "invalid duration: 00:60:00")
-	assert.EqualError(t, d.UnmarshalText([]byte("00:00:00.-1")), "invalid duration: 00:00:00.-1")
-	assert.EqualError(t, d.UnmarshalText([]byte("00:00:00.1000")), "invalid duration: 00:00:00.1000")
-	assert.EqualError(t, d.UnmarshalText([]byte("00h01m")), "invalid duration: 00h01m")
-}
+	DescribeTable("marshal",
+		func(d Duration, exp string) {
+			b, err := d.MarshalText()
+			Expect(err).NotTo(HaveOccurred())
+			Expect(string(b)).To(Equal(exp))
+		},
+		Entry("00:00:00", Duration(0), "00:00:00"),
+		Entry("00:00:00.002", Duration(2*time.Millisecond), "00:00:00.002"),
+		Entry("00:00:02", Duration(2*time.Second), "00:00:02"),
+		Entry("00:02:00", Duration(2*time.Minute), "00:02:00"),
+		Entry("02:00:00", Duration(2*time.Hour), "02:00:00"),
+	)
+
+	DescribeTable("unmarshal",
+		func(s string, exp Duration) {
+			d := new(Duration)
+			Expect(d.UnmarshalText([]byte(s))).To(Succeed())
+			Expect(*d).To(Equal(exp))
+		},
+		Entry("00:00:00", "00:00:00", Duration(0)),
+		Entry("00:00:00.002", "00:00:00.002", Duration(2*time.Millisecond)),
+		Entry("00:00:02", "00:00:02", Duration(2*time.Second)),
+		Entry("00:02:00", "00:02:00", Duration(2*time.Minute)),
+		Entry("02:00:00", "02:00:00", Duration(2*time.Hour)),
+	)
+
+	It("should fail to unmarshal bad inputs", func() {
+		d := new(Duration)
+		Expect(d.UnmarshalText([]byte("00:00:60"))).To(MatchError("invalid duration: 00:00:60"))
+		Expect(d.UnmarshalText([]byte("00:60:00"))).To(MatchError("invalid duration: 00:60:00"))
+		Expect(d.UnmarshalText([]byte("00:00:00.-1"))).To(MatchError("invalid duration: 00:00:00.-1"))
+		Expect(d.UnmarshalText([]byte("00:00:00.1000"))).To(MatchError("invalid duration: 00:00:00.1000"))
+		Expect(d.UnmarshalText([]byte("00h01m"))).To(MatchError("invalid duration: 00h01m"))
+	})
+
+})

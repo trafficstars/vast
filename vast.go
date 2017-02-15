@@ -110,14 +110,14 @@ type InLine struct {
 }
 
 type Error struct {
-	URI string `xml:",cdata"`
+	URI URI `xml:",cdata"`
 }
 
 // Impression is a URI that directs the video player to a tracking resource file that
 // the video player should request when the first frame of the ad is displayed
 type Impression struct {
 	ID  string `xml:"id,attr,omitempty"`
-	URI string `xml:",cdata"`
+	URI URI    `xml:",cdata"`
 }
 
 // Pricing provides a value that represents a price that can be used by real-time
@@ -146,7 +146,7 @@ type Wrapper struct {
 	// The name of the ad server that returned the ad
 	AdSystem *AdSystem
 	// URL of ad tag of downstream Secondary Ad Server
-	VASTAdTagURI string
+	VASTAdTagURI URI
 	// One or more URIs that directs the video player to a tracking resource file that the
 	// video player should request when the first frame of the ad is displayed
 	Impressions []Impression `xml:"Impression"`
@@ -255,7 +255,7 @@ type Linear struct {
 	// begins playing.
 	SkipOffset *Offset `xml:"skipoffset,attr,omitempty"`
 	// Duration in standard time format, hh:mm:ss
-	Duration           string
+	Duration           *Duration
 	AdParameters       *AdParameters `xml:",omitempty"`
 	Icons              []Icon
 	TrackingEvents     []Tracking          `xml:"TrackingEvents>Tracking,omitempty"`
@@ -461,7 +461,7 @@ type Tracking struct {
 	// The time during the video at which this url should be pinged. Must be present for
 	// progress event. Must match (\d{2}:[0-5]\d:[0-5]\d(\.\d\d\d)?|1?\d?\d(\.?\d)*%)
 	Offset *Offset `xml:"offset,attr,omitempty"`
-	URI    string  `xml:",cdata"`
+	URI    URI     `xml:",cdata"`
 }
 
 // StaticResource is the URL to a static file, such as an image or SWF file
@@ -469,7 +469,7 @@ type StaticResource struct {
 	// Mime type of static resource
 	CreativeType string `xml:"creativeType,attr,omitempty"`
 	// URL to a static file, such as an image or SWF file
-	URI string `xml:",cdata"`
+	URI URI `xml:",cdata"`
 }
 
 // HTMLResource is a container for HTML data
@@ -496,7 +496,7 @@ type VideoClicks struct {
 // VideoClick defines a click URL for a linear creative
 type VideoClick struct {
 	ID  string `xml:"id,attr,omitempty"`
-	URI string `xml:",cdata"`
+	URI URI    `xml:",cdata"`
 }
 
 // MediaFile defines a reference to a linear creative asset
@@ -534,7 +534,7 @@ type MediaFile struct {
 	// (for Flash/Flex), “initParams” (for Silverlight) and “GetVariables” (variables
 	// placed in key/value pairs on the asset request).
 	APIFramework string `xml:"apiFramework,attr,omitempty"`
-	URI          string `xml:",cdata"`
+	URI          URI    `xml:",cdata"`
 }
 
 // Extensions defines extensions
@@ -554,5 +554,5 @@ type Extension struct {
 
 type CompanionClickThrough struct {
 	// URL to a static file, such as an image or SWF file
-	URI string `xml:",cdata"`
+	URI URI `xml:",cdata"`
 }
