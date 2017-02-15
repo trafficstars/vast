@@ -180,7 +180,57 @@ var _ = Describe("VAST", func() {
 				},
 			},
 		}),
-		PEntry("wrapper linear", "testdata/vast_wrapper_linear_1.xml", &VAST{}),
+
+		Entry("wrapper linear", "testdata/vast_wrapper_linear_1.xml", &VAST{
+			Version: "2.0",
+			Ads: []Ad{
+				{
+					ID: "602833",
+					Wrapper: &Wrapper{
+						AdSystem:     &AdSystem{Name: "Acudeo Compatible"},
+						VASTAdTagURI: URIString("http://demo.tremormedia.com/proddev/vast/vast_inline_linear.xml"),
+						Error:        []Error{{URI: URIString("http://myErrorURL/wrapper/error")}},
+						Impressions:  []Impression{{URI: URIString("http://myTrackingURL/wrapper/impression")}},
+						Creatives: []CreativeWrapper{
+							{
+								AdID: "602833",
+								Linear: &LinearWrapper{
+									TrackingEvents: []Tracking{
+										{Event: "creativeView", URI: URIString("http://myTrackingURL/wrapper/creativeView")},
+										{Event: "start", URI: URIString("http://myTrackingURL/wrapper/start")},
+										{Event: "midpoint", URI: URIString("http://myTrackingURL/wrapper/midpoint")},
+										{Event: "firstQuartile", URI: URIString("http://myTrackingURL/wrapper/firstQuartile")},
+										{Event: "thirdQuartile", URI: URIString("http://myTrackingURL/wrapper/thirdQuartile")},
+										{Event: "complete", URI: URIString("http://myTrackingURL/wrapper/complete")},
+										{Event: "mute", URI: URIString("http://myTrackingURL/wrapper/mute")},
+										{Event: "unmute", URI: URIString("http://myTrackingURL/wrapper/unmute")},
+										{Event: "pause", URI: URIString("http://myTrackingURL/wrapper/pause")},
+										{Event: "resume", URI: URIString("http://myTrackingURL/wrapper/resume")},
+										{Event: "fullscreen", URI: URIString("http://myTrackingURL/wrapper/fullscreen")},
+									},
+								},
+							},
+							{
+								Linear: &LinearWrapper{
+									VideoClicks: &VideoClicks{
+										ClickTrackings: []VideoClick{{URI: URIString("http://myTrackingURL/wrapper/click")}},
+									},
+								},
+							},
+							{
+								AdID: "602833-NonLinearTracking",
+								NonLinearAds: &NonLinearAdsWrapper{
+									TrackingEvents: []Tracking{
+										{Event: "creativeView", URI: URIString("http://myTrackingURL/wrapper/creativeView")},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		}),
+
 		PEntry("wrapper nonlinear", "testdata/vast_wrapper_nonlinear_1.xml", &VAST{}),
 	)
 
