@@ -99,6 +99,7 @@ var _ = Describe("VAST", func() {
 					Extensions: &Extensions{
 						Extensions: []Extension{
 							{
+								Type: "geo",
 								Data: []byte(`
 			<Geo>
 				<Country>US</Country>

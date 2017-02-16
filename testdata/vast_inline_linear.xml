@@ -47,7 +47,7 @@
 		</Creative>
 	</Creatives>
 	<Extensions>
-		<Extension>
+		<Extension type="geo">
 			<Geo>
 				<Country>US</Country>
 				<State>CA</State>
