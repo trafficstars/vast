@@ -15,3 +15,8 @@ func (s *URI) UnmarshalText(data []byte) error {
 	*s = URI(bytes.TrimSpace(data))
 	return nil
 }
+
+// String implements Stringer interface
+func (s URI) String() string {
+	return string(s)
+}

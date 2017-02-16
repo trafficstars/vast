@@ -30,4 +30,12 @@ var _ = Describe("URI", func() {
 		Entry("Real-world Example", "\n\t\t\t http://example.com \n\t\t\t", URI("http://example.com")),
 	)
 
+	DescribeTable("stringer",
+		func(d URI, exp string) {
+			Expect(d.String()).To(Equal(exp))
+		},
+		Entry("Blank", URI(""), ""),
+		Entry("http://example.com", URI("http://example.com"), "http://example.com"),
+	)
+
 })
