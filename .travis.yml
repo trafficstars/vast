@@ -6,3 +6,6 @@ go:
 matrix:
   allow_failures:
       - go: tip
+addons:
+  apt_packages:
+    - libxml2-dev

@@ -1,17 +1,34 @@
 package vast
 
 import (
+	"bytes"
 	"encoding/xml"
+	"io/ioutil"
 	"os"
 	"testing"
 	"time"
 
+	libxml2 "github.com/lestrrat/go-libxml2"
+	"github.com/lestrrat/go-libxml2/xsd"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/ginkgo/extensions/table"
 	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("VAST", func() {
+	var schema *xsd.Schema
+
+	BeforeEach(func() {
+		b, err := ioutil.ReadFile("testdata/vast.xsd")
+		Expect(err).NotTo(HaveOccurred())
+
+		schema, err = xsd.Parse(b)
+		Expect(err).NotTo(HaveOccurred())
+	})
+
+	AfterEach(func() {
+		schema.Free()
+	})
 
 	DescribeTable("parse",
 
@@ -23,6 +40,12 @@ var _ = Describe("VAST", func() {
 			var v VAST
 			Expect(xml.NewDecoder(f).Decode(&v)).To(Succeed())
 			Expect(v).To(Equal(*exp))
+
+			w := new(bytes.Buffer)
+			Expect(xml.NewEncoder(w).Encode(v)).To(Succeed())
+			d, err := libxml2.ParseReader(w)
+			Expect(err).NotTo(HaveOccurred())
+			Expect(schema.Validate(d)).To(Succeed())
 		},
 
 		Entry("inline linear", "testdata/vast_inline_linear.xml", &VAST{
