@@ -1,0 +1,50 @@
+hash: 3ee2594d9eea1d290e57022cc3b054d393353e0ca6ae1a3e486998ab7471fc5d
+updated: 2017-03-29T13:53:17.931852414+01:00
+imports: []
+testImports:
+- name: github.com/lestrrat/go-libxml2
+  version: f5b79fe508fe624412438ca86d4eaf0009d60edc
+  subpackages:
+  - clib
+  - dom
+  - internal/debug
+  - parser
+  - types
+  - xpath
+  - xsd
+- name: github.com/onsi/ginkgo
+  version: 059cec02d342bab423425a99b191186a03255e9e
+  subpackages:
+  - config
+  - extensions/table
+  - internal/codelocation
+  - internal/containernode
+  - internal/failer
+  - internal/leafnodes
+  - internal/remote
+  - internal/spec
+  - internal/specrunner
+  - internal/suite
+  - internal/testingtproxy
+  - internal/writer
+  - reporters
+  - reporters/stenographer
+  - types
+- name: github.com/onsi/gomega
+  version: 0df7b7fdb38123c12a1f569f0affb2c2a7bd72cf
+  subpackages:
+  - format
+  - internal/assertion
+  - internal/asyncassertion
+  - internal/oraclematcher
+  - internal/testingtsupport
+  - matchers
+  - matchers/support/goraph/bipartitegraph
+  - matchers/support/goraph/edge
+  - matchers/support/goraph/node
+  - matchers/support/goraph/util
+  - types
+- name: github.com/pkg/errors
+  version: ff09b135c25aae272398c51a07235b90a75aa4f0
+- name: gopkg.in/yaml.v2
+  version: a83829b6f1293c91addabc89d0571c246397bbf4
