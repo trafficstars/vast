@@ -1,11 +1,7 @@
 language: go
 go:
-- 1.4
-- 1.5
-- tip
-matrix:
-  allow_failures:
-      - go: tip
+- 1.7.5
+- 1.8
 addons:
   apt_packages:
     - libxml2-dev
