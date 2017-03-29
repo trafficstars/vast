@@ -1,3 +1,6 @@
 # VAST Golang Library
 
-[![godoc](http://img.shields.io/badge/godoc-reference-blue.svg?style=flat)](https://godoc.org/github.com/rs/vast) [![license](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/rs/vast/master/LICENSE) [![Build Status](https://travis-ci.org/rs/vast.svg?branch=master)](https://travis-ci.org/rs/vast) [![Coverage](http://gocover.io/_badge/github.com/rs/vast)](http://gocover.io/github.com/rs/vast)
+[![License](http://img.shields.io/badge/license-MIT-red.svg?style=flat)](https://raw.githubusercontent.com/bsm/vast/master/LICENSE)
+[![GoDoc](https://godoc.org/github.com/bsm/vast?status.svg)](https://godoc.org/github.com/bsm/vast)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bsm/vast)](https://goreportcard.com/report/github.com/bsm/vast)
+[![Build Status](https://travis-ci.org/bsm/vast.svg?branch=master)](https://travis-ci.org/bsm/vast)
