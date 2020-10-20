@@ -145,7 +145,7 @@ type Wrapper struct {
 	// The name of the ad server that returned the ad
 	AdSystem *AdSystem
 	// URL of ad tag of downstream Secondary Ad Server
-	VASTAdTagURI URI
+	VASTAdTagURI URI `xml:",cdata"`
 	// A URI representing an error-tracking pixel; this element can occur multiple
 	// times.
 	Error []Error `xml:",omitempty"`
